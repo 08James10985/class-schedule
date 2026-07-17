@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>MA-4-A · Class Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #fdf9f9;
+    --paper: #ffffff;
+    --ink: #2a2130;
+    --ink-soft: #7c7480;
+    --line: #f0e2e6;
+    --rose: #c23f6f;
+    --rose-deep: #8f2f52;
+    --rose-tint: #fbeaf0;
+    --clay: #e8a4a1;
+    --plum: #6a4a63;
+    --ok: #4d8b74;
+    --radius: 18px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 60px;
+  }
+
+  /* ---------- Header ---------- */
+  .hero{
+    position: relative;
+    padding: 24px 20px 20px;
+    background:
+      radial-gradient(120% 140% at 100% -10%, #f7d9de 0%, transparent 55%),
+      radial-gradient(90% 120% at -10% 0%, #f4e2e8 0%, transparent 50%),
+      var(--paper);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .eyebrow{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color: var(--rose-deep);
+    font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow .dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--rose);
+    display:inline-block;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size: 28px;
+    line-height:1.08;
+    margin-top:6px;
+    color: var(--ink);
+  }
+  h1 em{ color: var(--rose); font-style: normal; }
+  .sub{
+    margin-top:5px;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+
+  .now-strip{
+    margin-top: 14px;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 12px;
+    padding: 11px 14px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .now-strip .label{
+    font-size: 11px;
+    letter-spacing:.08em;
+    text-transform: uppercase;
+    color: #d9b8c3;
+    font-family:'Space Grotesk', sans-serif;
+  }
+  .now-strip .value{
+    font-family:'Fraunces', serif;
+    font-size: 16px;
+    margin-top: 3px;
+  }
+  .now-strip .clock{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight:600;
+    color: var(--clay);
+    white-space:nowrap;
+  }
+
+  /* ---------- Day filter ---------- */
+  .filters{
+    display:flex;
+    gap: 7px;
+    padding: 12px 16px 2px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .filters::-webkit-scrollbar{display:none;}
+  .chip{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink-soft);
+    white-space: nowrap;
+    cursor:pointer;
+    transition: all .15s ease;
+  }
+  .chip.active{
+    background: var(--rose);
+    border-color: var(--rose);
+    color: #fff;
+  }
+
+  /* ---------- List ---------- */
+  .list{
+    padding: 10px 14px 0;
+    display:flex;
+    flex-direction:column;
+    gap: 9px;
+  }
+
+  .card{
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px 14px 12px 14px;
+    position: relative;
+    display:flex;
+    gap: 11px;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .card.today{
+    border-color: #eec3d0;
+    box-shadow: 0 6px 20px -8px rgba(194,63,111,.28);
+  }
+  .card.live{
+    background: linear-gradient(180deg, #fff, var(--rose-tint));
+    border-color: var(--rose);
+  }
+  .bar{
+    width: 4px;
+    border-radius: 4px;
+    flex-shrink:0;
+    background: var(--clay);
+  }
+  .card.day-MTh .bar{ background: #c23f6f; }
+  .card.day-TF .bar{ background: #6a4a63; }
+
+  .card-main{ flex:1; min-width:0; }
+  .row-top{
+    display:flex;
+    justify-content: space-between;
+    align-items:flex-start;
+    gap: 10px;
+  }
+  .code{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--rose);
+    letter-spacing:.02em;
+  }
+  .units{
+    font-size: 11px;
+    color: var(--ink-soft);
+    background: var(--rose-tint);
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-weight:600;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .title{
+    font-family:'Fraunces', serif;
+    font-size: 16px;
+    font-weight:600;
+    margin-top: 1px;
+    color: var(--ink);
+    line-height:1.2;
+  }
+  .meta{
+    margin-top: 6px;
+    display:flex;
+    flex-wrap:wrap;
+    gap: 4px 12px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .meta span{ display:flex; align-items:center; gap:4px; }
+  .meta svg{ width:13px; height:13px; opacity:.7; flex-shrink:0; }
+  .status-pill{
+    margin-top:6px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size: 10.5px;
+    font-weight:700;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color: var(--ok);
+  }
+  .status-pill.live{ color: var(--rose); }
+  .status-pill .blip{
+    width:6px;height:6px;border-radius:50%;
+    background: currentColor;
+  }
+
+  /* ---------- Footer total ---------- */
+  .total{
+    margin: 16px 14px 0;
+    background: linear-gradient(135deg, var(--rose) 0%, var(--rose-deep) 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 14px 18px;
+    display:flex;
+    align-items:baseline;
+    justify-content: space-between;
+  }
+  .total .t-label{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    opacity:.85;
+  }
+  .total .t-value{
+    font-family:'Fraunces', serif;
+    font-size: 28px;
+    font-weight:700;
+  }
+
+  .empty{
+    text-align:center;
+    padding: 40px 20px;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="eyebrow"><span class="dot"></span>MA-4-A &middot; Block Section</div>
+    <h1>Your week, <em>at a glance</em></h1>
+    <div class="sub">7 subjects &middot; 21 units total</div>
+
+    <div class="now-strip">
+      <div>
+        <div class="label" id="now-label">Right now</div>
+        <div class="value" id="now-value">Loading&hellip;</div>
+      </div>
+      <div class="clock" id="clock">--:--</div>
+    </div>
+  </div>
+
+  <div class="filters" id="filters">
+    <div class="chip active" data-day="all">All days</div>
+    <div class="chip" data-day="MTh">Mon &amp; Thu</div>
+    <div class="chip" data-day="TF">Tue &amp; Fri</div>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <div class="total">
+    <div class="t-label">Total units</div>
+    <div class="t-value">21</div>
+  </div>
+
+<script>
+const ICON_ROOM = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>';
+const ICON_TIME = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>';
+
+// day codes: 1=Mon,2=Tue,3=Wed,4=Thu,5=Fri
+const subjects = [
+  { code:"GEMand-SS 202", title:"Rizal's Life and Works", section:"MA-4-A-1", room:"Room 4", days:"MTh", dayNums:[1,4], start:[7,30], end:[9,0], prof:"Marneej Balmes", units:3 },
+  { code:"GE-SS 401", title:"Readings in Philippine History", section:"MA-4-A-2", room:"TBA", days:"MTh", dayNums:[1,4], start:[14,30], end:[16,0], prof:"Maria Theresa Misoles", units:3 },
+  { code:"CBME 2", title:"Strategic Management", section:"MA-4-A-3", room:"AB-7", days:"TF", dayNums:[2,5], start:[10,30], end:[12,0], prof:"Catherine Garcia", units:3 },
+  { code:"Elect 401", title:"Human Resource Management", section:"MA-4-A-4", room:"Room 8", days:"TF", dayNums:[2,5], start:[7,30], end:[9,0], prof:"Ronald Tecson", units:3 },
+  { code:"MPrE 401", title:"Performance Management System", section:"MA-4-A-5", room:"Room 9", days:"MTh", dayNums:[1,4], start:[13,0], end:[14,30], prof:"Christian James Lopina", units:3 },
+  { code:"MPrE 403", title:"Sustainability and Strategic Audit", section:"MA-4-A-6", room:"Room 8", days:"TF", dayNums:[2,5], start:[14,30], end:[16,0], prof:"Mylyn Agapay", units:3 },
+  { code:"MPrE 405", title:"Valuation Methods", section:"MA-4-A-7", room:"Room 8", days:"TF", dayNums:[2,5], start:[13,0], end:[14,30], prof:"Mylyn Agapay", units:3 },
+];
+
+function fmtTime([h,m]){
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  let hh = h % 12; if(hh===0) hh=12;
+  return hh + ':' + String(m).padStart(2,'0') + ' ' + ampm;
+}
+function toMinutes([h,m]){ return h*60+m; }
+
+function render(filter){
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  const now = new Date();
+  const nowDay = now.getDay();
+  const nowMin = now.getHours()*60 + now.getMinutes();
+
+  const filtered = subjects.filter(s => filter==='all' || s.days===filter);
+
+  if(filtered.length === 0){
+    list.innerHTML = '<div class="empty">No subjects on this filter.</div>';
+    return;
+  }
+
+  filtered.forEach(s => {
+    const isToday = s.dayNums.includes(nowDay);
+    const startMin = toMinutes(s.start);
+    const endMin = toMinutes(s.end);
+    const isLive = isToday && nowMin >= startMin && nowMin < endMin;
+
+    const card = document.createElement('div');
+    card.className = 'card day-' + s.days + (isToday ? ' today' : '') + (isLive ? ' live' : '');
+
+    let statusHtml = '';
+    if(isLive){
+      statusHtml = '<div class="status-pill live"><span class="blip"></span>In session now</div>';
+    } else if(isToday){
+      statusHtml = '<div class="status-pill"><span class="blip"></span>Today</div>';
+    }
+
+    card.innerHTML = `
+      <div class="bar"></div>
+      <div class="card-main">
+        <div class="row-top">
+          <div class="code">${s.code} &middot; ${s.section}</div>
+          <div class="units">${s.units} Units</div>
+        </div>
+        <div class="title">${s.title}</div>
+        <div class="meta">
+          <span>${ICON_TIME} ${s.days} &middot; ${fmtTime(s.start)}&ndash;${fmtTime(s.end)}</span>
+          <span>${ICON_ROOM} ${s.room}</span>
+        </div>
+        ${statusHtml}
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function findCurrentOrNext(){
+  const now = new Date();
+  const nowDay = now.getDay();
+  const nowMin = now.getHours()*60 + now.getMinutes();
+
+  // Check live class today
+  for(const s of subjects){
+    if(s.dayNums.includes(nowDay)){
+      const startMin = toMinutes(s.start), endMin = toMinutes(s.end);
+      if(nowMin >= startMin && nowMin < endMin){
+        return { type:'live', subject:s };
+      }
+    }
+  }
+  // Find next upcoming class (today or future days), search up to 7 days ahead
+  for(let offset=0; offset<7; offset++){
+    const checkDay = (nowDay + offset) % 7;
+    const dayMatches = subjects.filter(s => s.dayNums.includes(checkDay));
+    dayMatches.sort((a,b)=> toMinutes(a.start)-toMinutes(b.start));
+    for(const s of dayMatches){
+      if(offset === 0 && toMinutes(s.start) <= nowMin) continue;
+      return { type:'next', subject:s, offset };
+    }
+  }
+  return null;
+}
+
+function updateNowStrip(){
+  const now = new Date();
+  const label = document.getElementById('now-label');
+  const value = document.getElementById('now-value');
+  const clock = document.getElementById('clock');
+
+  clock.textContent = now.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit' });
+
+  const result = findCurrentOrNext();
+  if(!result){
+    label.textContent = 'This week';
+    value.textContent = 'No classes scheduled';
+    return;
+  }
+  const s = result.subject;
+  if(result.type === 'live'){
+    label.textContent = 'In session now';
+    value.textContent = `${s.code} &middot; ${s.room}`.replace('&middot;','·');
+  } else {
+    const dayLabel = result.offset === 0 ? 'today' : result.offset === 1 ? 'tomorrow' : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][s.dayNums.find(d => true) !== undefined ? new Date(now.getTime()+result.offset*86400000).getDay() : 0];
+    label.textContent = 'Up next';
+    value.textContent = `${s.code} ${dayLabel} at ${fmtTime(s.start)}`;
+  }
+}
+
+document.getElementById('filters').addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  render(chip.dataset.day);
+});
+
+render('all');
+updateNowStrip();
+setInterval(updateNowStrip, 30000);
+</script>
+
+</body>
+</html>
